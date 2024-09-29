@@ -34,8 +34,10 @@ def exempt(supply):
         if exemptions_check:
             exemptions['supply_road'].append(s['supply_road'])
             exemptions['supply_period'].append(s['supply_period'])
+            exemptions['supply_qty'].append(s['supply_qty'])
             exemptions['demand_road'].append(s['supply_road'])
             exemptions['demand_period'].append(s['supply_period'])
+            exemptions['demand_qty'].append(0)
             exemptions['assigned_quantity'].append(s['supply_qty'])
             if exemptions_check[0] == 'CleanOp':
                 exemptions['assignment_type'].append(f"{exemptions_rules[exemptions_check[0]]} {s['supply_road']}")
