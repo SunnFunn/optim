@@ -4,3 +4,6 @@
 *.csv
 *.Identifier
 *.pkl
+*.txt
+*.lp
+*.xlsx
