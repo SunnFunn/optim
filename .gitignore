@@ -2,3 +2,5 @@
 **/.idea/
 **/output_data/
 *.csv
+*.Identifier
+*.pkl
