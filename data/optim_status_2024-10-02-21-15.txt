@@ -1,7 +1,0 @@
- Status:
-Optimal
-Total Supply = 8038
-Total Demand = 3082
-Total Assignments = 3082
-Total Cost of Transportation =  26716
-Total compute time: 0.11 секунд

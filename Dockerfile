@@ -8,7 +8,10 @@ RUN pip install apache-airflow-providers-postgres
 COPY --chown=airflow:root ./app/ ./app/
 COPY --chown=airflow:root ./data/ ./data/
 COPY --chown=airflow:root ./dags/*.py ./dags/
-COPY requirements.txt .
+COPY --chown=airflow:root requirements.txt .
+COPY --chown=airflow:root email.ini .
+
 RUN pip install --no-cache-dir -r requirements.txt
 #RUN chown airflow:root ./app/data/
+
 ENTRYPOINT ["airflow", "standalone"]
