@@ -29,7 +29,7 @@ def prepare(path):
     for r in supply_roads:
         supply_dict[r] = {'1': 0, '6': 0}
     for s_data in supply_data:
-        supply_dict[s_data['supply_road']][str(s_data['supply_period'])] = s_data["supply_qty"]
+        supply_dict[s_data['supply_road']][str(s_data['supply_period'])] += s_data["supply_qty"]
     with open(path + "/supply_dict.pkl", 'wb') as file:
         pickle.dump(supply_dict, file, protocol=pickle.HIGHEST_PROTOCOL)
 
@@ -39,7 +39,7 @@ def prepare(path):
     for r in demand_roads:
         demand_dict[r] = {'5': 0, '8': 0, '10': 0, '15': 0}
     for d_data in demand_data:
-        demand_dict[d_data['demand_road']][str(d_data['demand_period'])] = d_data["demand_qty"]
+        demand_dict[d_data['demand_road']][str(d_data['demand_period'])] += d_data["demand_qty"]
     with open(path + "/demand_dict.pkl", 'wb') as file:
         pickle.dump(demand_dict, file, protocol=pickle.HIGHEST_PROTOCOL)
 

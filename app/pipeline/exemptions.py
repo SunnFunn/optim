@@ -24,7 +24,9 @@ def exempt(path):
         'SpreadOp': "В распыление на дорогу:",
         'StorageOp': "В отстой на дорогу:",
         'MaintOp': "В ремонт на дорогу:",
-        'RentOp': "В аренду на дорогу:"
+        'RentOp': "В аренду на дорогу:",
+        'NoCleanAssign': "Из под НПГ без промывки под аналогичный груз",
+        'DoubleOp': "Сдвоенная операция"
     }
     exemptions_list_check = [k for k, v in exemptions_rules.items()]
 
@@ -34,7 +36,7 @@ def exempt(path):
         for k, v in s.items():
             if k not in exemptions_list_check:
                 continue
-            elif k == 'CleanOp' and v == "В промывку":
+            elif k == 'CleanOp' and v not in ("Без промывки", "Через промывку"):
                 exemption_check = (k, v)
             elif k != 'CleanOp' and v != "нет":
                 exemption_check = (k, v)
@@ -46,11 +48,9 @@ def exempt(path):
             exemptions['demand_road'].append(s['supply_road'])
             exemptions['demand_period'].append(s['supply_period'])
             exemptions['demand_qty'].append(0)
+            exemptions['assignment_road'].append(exemption_check[1])
             exemptions['assigned_quantity'].append(s['supply_qty'])
-            if exemption_check[0] == 'CleanOp':
-                exemptions['assignment_type'].append(f"{exemptions_rules[exemption_check[0]]} {s['supply_road']}")
-            else:
-                exemptions['assignment_type'].append(f"{exemptions_rules[exemption_check[0]]} {exemption_check[1]}")
+            exemptions['assignment_type'].append(f"{exemptions_rules[exemption_check[0]]} {exemption_check[1]}")
 
             exempted_supply[idx] = 'exempted'
 
@@ -64,7 +64,7 @@ def exempt(path):
     except Exception as e:
         print(f"Warning: Exemptions data not saved! Occurred error: {e}")
 
-    print(exemptions_df)
+    exemptions_df.to_excel(path + "/exemptions.xlsx", index=False)
 
 
 if __name__ == '__main__':

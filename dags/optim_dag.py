@@ -1,3 +1,4 @@
+import os
 import pendulum
 import subprocess as sp
 from airflow.decorators import dag, task
@@ -15,22 +16,30 @@ from configparser import ConfigParser
 from time import *
 
 
-start_date = pendulum.local(2024, 10, 3, 16, 30, 0)
+date_list = [int(ele) for ele in os.environ['START_DATE'].split("-")]
+start_date = pendulum.local(*date_list)
+interval = int(os.environ['INTERVAL'])
+end_date_interval = int(os.environ['END_DATE_INTERVAL'])
+mail_pass = os.environ['MAIL_PASS']
 
 
 @dag(
-    schedule=timedelta(seconds=60),
+    schedule=timedelta(minutes=interval),
     start_date=start_date,
-    end_date=start_date.add(minutes=600),
+    end_date=start_date.add(hours=end_date_interval),
     catchup=False,
     tags=["RailOptim"],
 )
 def optimization_taskflow():
     @task()
+    def clear():
+        sp.run(['rm', '-f', '"/opt/airflow/data"'])
+
+    @task()
     def fetch():
         sp.run(['python3',
                 '/opt/airflow/app/pipeline/fetch_data.py',
-                '--url="http://172.26.144.1:8000"',
+                '--url="http://172.26.146.214:8000"',
                 '--path="/opt/airflow/data"'],
                capture_output=True,
                text=True)
@@ -71,7 +80,7 @@ def optimization_taskflow():
         server = cfg.get("smtp", "server")
         port = cfg.get("smtp", "port")
         from_addr = cfg.get("smtp", "from_addr")
-        passwd = cfg.get("smtp", "passwd")
+        passwd = mail_pass
 
         subject = cfg.get("smtp", "subject")
         to_addr = cfg.get("smtp", "to_addr")
@@ -110,6 +119,7 @@ def optimization_taskflow():
         finally:
             smtp.quit()
 
+    clear()
     fetch()
     exempt()
     prepare()

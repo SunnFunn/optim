@@ -10,7 +10,6 @@ from collections import defaultdict
 
 current = os.path.dirname(os.path.realpath(__file__))
 parent = os.path.dirname(current)
-print(current, parent)
 sys.path.append(parent)
 
 import utils
@@ -91,7 +90,7 @@ def optimize(path):
                                                demand8,
                                                demand10,
                                                demand15,
-                                               demand_road,
+                                               row.assignment_road,
                                                row.assigned_quantity,
                                                row.assignment_type]
 

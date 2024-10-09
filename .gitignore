@@ -1,6 +1,5 @@
 **/__pycache__/
-**/.idea/
-**/output_data/
+**/.vscode/
 *.csv
 *.Identifier
 *.pkl
